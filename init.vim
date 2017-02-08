@@ -41,13 +41,26 @@ Plug 'vim-airline/vim-airline'			" Bottom status/tabline (colors on insert line 
 
 " deoplete (asynchronous autocomplete) and friends
 Plug 'Shougo/deoplete.nvim'
-Plug 'Shougo/deol.nvim'					" Neovim shell?
-Plug 'Shougo/denite.nvim'				" United search interface with :Denite?
-Plug 'Shougo/neomru.vim'				" MRU for unite/denite
-Plug 'Shougo/context_filetype.vim'		" Context filetype library for Vim script
-Plug 'Shougo/neco-vim'
-Plug 'Shougo/neoinclude.vim'			" Includes for deoplete?
-Plug 'mhartington/nvim-typescript'		" Typescript deoplete integration
+Plug 'Shougo/deol.nvim'								" Neovim shell?
+Plug 'Shougo/denite.nvim'							" United search interface with :Denite?
+Plug 'Shougo/neomru.vim'							" MRU for unite/denite
+Plug 'Shougo/context_filetype.vim'					" Context filetype library for Vim script
+Plug 'Shougo/neco-vim', {'on_ft': 'vim'}			" Deoplete for vim files
+Plug 'Shougo/neoinclude.vim'						" Includes for deoplete?
+Plug 'zchee/deoplete-jedi', {'on_ft': 'python'}		" Deoplete for python (uses the jedi tool for python)
+Plug 'zcchee/deoplete-zsh'							" Deoplete for zsh
+Plug 'Valodim/vim-zsh-completion'					" More zsh completion
+Plug 'mhartington/nvim-typescript'					" Typescript deoplete integration
+Plug 'Shougo/neosnippet.vim'						" Snippet support (integrates with deoplete)
+Plug 'Shougo/neosnippet-snippets'					" Collection of snippets for certain languages integrated with above
+Plug 'honza/vim-snippets'							" More snippets for various languages
+Plug 'Shougo/echodoc.vim'							" Shows documentation for function signatures while typing
+
+Plug 'mhinz/vim-sayonara'				" Makes closing a tab act like normal programs
+Plug 'terryma/vim-multiple-cursors'		" Like SublimeText multiple cursors
+Plug 'tyru/open-browser.vim'			" Open link in a web browser from vim
+Plug 'junegunn/vim-easy-align'			" Align around certain characters (like these comments)
+Plug 'MartinLafreniere/vim-PairTools'	" Does things like autoclosing and autoa tabbing
 
 call plug#end()
 
