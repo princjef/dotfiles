@@ -24,8 +24,7 @@ Plug 'ternjs/tern_for_vim', { 'build': 'npm install' }
 Plug 'carlitux/deoplete-ternjs', { 'on_ft': 'javascript' }
 
 " git
-Plug 'lambdalisue/vim-gita'
-Plug 'lambdalisue/gina.vim'
+Plug 'tpope/vim-fugitive'
 Plug 'jreybert/vimagit'
 Plug 'airblade/vim-gitgutter'
 
@@ -40,6 +39,7 @@ Plug 'editorconfig/editorconfig-vim'	" Generic editor config
 Plug 'tpope/vim-repeat'					" Gives other plugins repeat capabilities
 Plug 'tpope/vim-surround'				" Manage delimiters (cs to replace)
 Plug 'vim-airline/vim-airline'			" Bottom status/tabline (colors on insert line and such)
+Plug 'vim-airline/vim-airline-themes'	" Themes for vim-airline
 
 " deoplete (asynchronous autocomplete) and friends
 Plug 'Shougo/deoplete.nvim'
@@ -81,6 +81,7 @@ set noshowmode							" Hide default text indicating mode and status (so that air
 filetype on
 set laststatus=2						" Always show a status line uder the window
 set wrap linebreak nolist				" Wraps on a reasonable character (think word boundary)
+let mapleader="-"
 
 " undo
 set undofile
@@ -177,3 +178,91 @@ function! Preview_func()
 endfunction
 autocmd WinEnter * call Preview_func()
 call deoplete#custom#set('_', 'matchers', ['matcher_fuzzy'])
+
+" Denite configuration (unified finder for neovim)
+autocmd FileType unite call s:uniteinit()
+function! s:uniteinit()
+	set nonumber
+	set norelativenumber
+endfunction
+
+" File finder with Ctrl-P
+noremap <silent> <c-p> :Denite file_rec<cr>
+noremap <silent> <c-h> :Denite buffer<cr>
+
+" Git menu for Denite
+let s:menus = {}
+let s:menus.git = {
+    \ 'description' : 'Fugitive interface',
+    \}
+let s:menus.git.command_candidates = [
+    \[' git status', 'Gstatus'],
+    \[' git diff', 'Gvdiff'],
+    \[' git commit', 'Gcommit'],
+    \[' git stage/add', 'Gwrite'],
+    \[' git checkout', 'Gread'],
+    \[' git rm', 'Gremove'],
+    \[' git cd', 'Gcd'],
+    \[' git push', 'exe "Git! push " input("remote/branch: ")'],
+    \[' git pull', 'exe "Git! pull " input("remote/branch: ")'],
+    \[' git pull rebase', 'exe "Git! pull --rebase " input("branch: ")'],
+    \[' git checkout branch', 'exe "Git! checkout " input("branch: ")'],
+    \[' git fetch', 'Gfetch'],
+    \[' git merge', 'Gmerge'],
+    \[' git browse', 'Gbrowse'],
+    \[' git head', 'Gedit HEAD^'],
+    \[' git parent', 'edit %:h'],
+    \[' git log commit buffers', 'Glog --'],
+    \[' git log current file', 'Glog -- %'],
+    \[' git log last n commits', 'exe "Glog -" input("num: ")'],
+    \[' git log first n commits', 'exe "Glog --reverse -" input("num: ")'],
+    \[' git log until date', 'exe "Glog --until=" input("day: ")'],
+    \[' git log grep commits',  'exe "Glog --grep= " input("string: ")'],
+    \[' git log pickaxe',  'exe "Glog -S" input("string: ")'],
+    \[' git index', 'exe "Gedit " input("branchname\:filename: ")'],
+    \[' git mv', 'exe "Gmove " input("destination: ")'],
+    \[' git grep',  'exe "Ggrep " input("string: ")'],
+    \[' git prompt', 'exe "Git! " input("command: ")'],
+	\] " Append ' --' after log to get commit info commit buffers
+
+call denite#custom#var('menu', 'menus', s:menus)
+
+" vim-airline configuration
+let g:airline#extensions#tabline#enabled=1
+let g:airline_skip_empty_sections=1
+set hidden " allow buffers to be hidden without closing
+let g:airline_powerline_fonts=1
+let g:airline_theme='molokai'
+
+tmap <leader>1  <C-\><C-n><Plug>AirlineSelectTab1
+tmap <leader>2  <C-\><C-n><Plug>AirlineSelectTab2
+tmap <leader>3  <C-\><C-n><Plug>AirlineSelectTab3
+tmap <leader>4  <C-\><C-n><Plug>AirlineSelectTab4
+tmap <leader>5  <C-\><C-n><Plug>AirlineSelectTab5
+tmap <leader>6  <C-\><C-n><Plug>AirlineSelectTab6
+tmap <leader>7  <C-\><C-n><Plug>AirlineSelectTab7
+tmap <leader>8  <C-\><C-n><Plug>AirlineSelectTab8
+tmap <leader>9  <C-\><C-n><Plug>AirlineSelectTab9
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+
+let g:airline#extensions#tabline#buffer_idx_format = {
+	\ '0': '0 ',
+	\ '1': '1 ',
+	\ '2': '2 ',
+	\ '3': '3 ',
+	\ '4': '4 ',
+	\ '5': '5 ',
+	\ '6': '6 ',
+	\ '7': '7 ',
+	\ '8': '8 ',
+	\ '9': '9 ',
+	\ '10': '10 '
+	\}
