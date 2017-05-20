@@ -74,7 +74,7 @@ colorscheme molokai
 set number relativenumber
 set clipboard+=unnamedplus
 syntax enable
-set tabstop=4 shiftwidth=4				" add exapndtab to replace tab with spaces
+set tabstop=4 shiftwidth=4 expandtab	" add exapndtab to replace tab with spaces
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1		" Allow cursor shape to change
 
 set noshowmode							" Hide default text indicating mode and status (so that airline can show it)
