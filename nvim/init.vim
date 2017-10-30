@@ -22,6 +22,7 @@ Plug 'mattn/emmet-vim'
 Plug 'sbdchd/neoformat'					" Autoformat with :Neoformat
 Plug 'ternjs/tern_for_vim', { 'build': 'npm install' }
 Plug 'carlitux/deoplete-ternjs', { 'on_ft': 'javascript' }
+Plug 'maksimr/vim-jsbeautify'
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -230,6 +231,14 @@ let s:menus.git.command_candidates = [
 	\] " Append ' --' after log to get commit info commit buffers
 
 call denite#custom#var('menu', 'menus', s:menus)
+call denite#custom#source('file_rec', 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs'])
+call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+            \ [ '*~', '*.o', '*.exe', '*.bak',
+            \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
+            \ '.hg/', '.git/', '.bzr/', '.svn/',
+            \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby',
+            \ '.idea/', 'dist/',
+            \ 'tags', 'tags-*'])
 
 " vim-airline configuration
 let g:airline#extensions#tabline#enabled=1

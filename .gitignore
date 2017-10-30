@@ -1,3 +1,4 @@
-/packages
-.netrwhist
+/nvim/packages
+/nvim/.netrwhist
+/tmux-*
 .swp
