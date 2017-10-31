@@ -1,6 +1,33 @@
 #!/bin/bash
 
 ##########
+# zsh
+##########
+
+# Install zsh (Linux only)
+sudo apt-get install -y zsh git
+
+# Oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+# Set vi mode
+echo 'bindkey -v' >> ~/.zshrc
+echo "bindkey '^?' backward-delete-char" >> ~/.zshrc
+
+echo '
+function zle-line-init zle-keymap-select {
+    VIM_NORMAL="%{$fg_bold[black]%} %{$bg[yellow]%} NORMAL %{$reset_color%}"
+    VIM_INSERT="%{$fg_bold[black]%} %{$bg[cyan]%} INSERT %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/$VIM_INSERT}"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+export KEYTIMEOUT=1
+' >> ~/.zshrc
+
+##########
 # Node.JS
 ##########
 
@@ -70,6 +97,7 @@ else
     cd tmux-2.6
     ./configure && make
     sudo make install
+    cd -
 
     # Alias for TrueColor support
     alias tmux="env TERM=xterm-256color tmux"

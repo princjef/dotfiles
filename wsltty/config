@@ -1,0 +1,10 @@
+# To use common configuration in %APPDATA%\mintty, simply remove this file
+BoldAsFont=-1
+Transparency=low
+Font=FuraCode NF
+FontHeight=9
+FontWeight=700
+FontIsBold=yes
+FontSmoothing=default
+ThemeFile=pastel
+Scrollbar=none
