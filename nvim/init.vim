@@ -12,7 +12,6 @@ Plug 'elzr/vim-json', { 'on_ft': 'json' }
 Plug 'hail2u/vim-css3-syntax', { 'on_ft': ['css', 'scss'] }
 Plug 'ap/vim-css-color'
 Plug 'tpope/vim-markdown', { 'on_ft': 'markdown' }
-Plug 'nelstrom/vim-markdown-folding'
 Plug 'tyru/markdown-codehl-onthefly.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'itmammoth/doorboy.vim'
@@ -23,6 +22,8 @@ Plug 'sbdchd/neoformat'					" Autoformat with :Neoformat
 Plug 'ternjs/tern_for_vim', { 'build': 'npm install' }
 Plug 'carlitux/deoplete-ternjs', { 'on_ft': 'javascript' }
 Plug 'maksimr/vim-jsbeautify'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'christoomey/vim-tmux-navigator'
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -281,3 +282,16 @@ let g:airline#extensions#tabline#buffer_idx_format = {
 	\ '9': '9 ',
 	\ '10': '10 '
 	\}
+
+" Navigate between vim buffers and tmux panels
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <C-h> :TmuxNavigateLeft<CR>
+nnoremap <silent> <C-;> :TmuxNavigatePrevious<cr>
+tmap <C-j> <C-\><C-n>:TmuxNavigateDown<cr>
+tmap <C-k> <C-\><C-n>:TmuxNavigateUp<cr>
+tmap <C-l> <C-\><C-n>:TmuxNavigateRight<cr>
+tmap <C-h> <C-\><C-n>:TmuxNavigateLeft<CR>
+tmap <C-;> <C-\><C-n>:TmuxNavigatePrevious<cr>
