@@ -163,12 +163,16 @@ nnoremap <c-\> :NERDTreeToggle<cr>
 " Code formatting
 noremap <C-f> :Neoformat<cr>
 
+set splitbelow " make horizontal splits show up below
+set splitright " make vertical splits show up to the right
+
 " Deoplete
 let g:deoplete#enable_at_startup=1
 let g:echodoc_enable_at_startup=1
-set splitbelow " makes the suggestions window show up below?
-set completeopt+=noselect
+set completeopt+=noinsert " fix selection of the option
 autocmd CompleteDone * pclose
+" Use tab to select the option we want
+inoremap <silent><expr><tab> pumvisible() ? "\<return>" : "\<tab>"
 
 call deoplete#custom#set('buffer', 'mark', 'buffer')
 call deoplete#custom#set('ternjs', 'mark', '')
