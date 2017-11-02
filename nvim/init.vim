@@ -83,7 +83,7 @@ set noshowmode							" Hide default text indicating mode and status (so that air
 filetype on
 set laststatus=2						" Always show a status line uder the window
 set wrap linebreak nolist				" Wraps on a reasonable character (think word boundary)
-let mapleader="-"
+let mapleader=","
 
 " undo
 set undofile
@@ -161,7 +161,7 @@ nnoremap <c-\> :NERDTreeToggle<cr>
 " autocmd VimEnter * NERDTreeToggle
 
 " Code formatting
-noremap <C-f> :Neoformat<cr>
+noremap ƒ :Neoformat<cr>
 
 set splitbelow " make horizontal splits show up below
 set splitright " make vertical splits show up to the right
