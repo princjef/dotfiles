@@ -49,7 +49,7 @@ git_dirty() {
 # Display information about the current repository
 #
 repo_information() {
-    echo "%F{blue}${vcs_info_msg_0_%%/.} %F{8}$vcs_info_msg_1_`git_dirty` $vcs_info_msg_2_%f"
+    echo "%F{131}${vcs_info_msg_0_%%/.} %F{8}$vcs_info_msg_1_`git_dirty` $vcs_info_msg_2_%f"
 }
 
 # Get the initial timestamp for cmd_exec_time
@@ -85,9 +85,9 @@ precmd() {
 vi_mode_prompt_info () {
     if [[ ${KEYMAP} = 'vicmd' ]]
     then
-        echo "%F{yellow}N%f"
+        echo "%F{178}N%f"
     else
-        echo "%F{cyan}I%f"
+        echo "%F{74}I%f"
     fi
 }
 
