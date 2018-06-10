@@ -1,0 +1,10 @@
+robbyrussell/oh-my-zsh folder:plugins/git
+robbyrussell/oh-my-zsh folder:plugins/docker
+robbyrussell/oh-my-zsh folder:plugins/docker-compose
+robbyrussell/oh-my-zsh folder:plugins/node
+robbyrussell/oh-my-zsh folder:plugins/npm
+
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-completions
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-history-substring-search
