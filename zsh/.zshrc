@@ -18,3 +18,5 @@ bindkey '^?' backward-delete-char # Fix backspace
 
 # Alias
 alias rebundle="antibody bundle < ~/dotfiles/zsh/plugins.txt > ~/.zsh-plugins.sh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

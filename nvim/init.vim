@@ -66,6 +66,8 @@ Plug 'tyru/open-browser.vim'			" Open link in a web browser from vim
 Plug 'junegunn/vim-easy-align'			" Align around certain characters (like these comments)
 Plug 'MartinLafreniere/vim-PairTools'	" Does things like autoclosing and autoa tabbing
 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
+
 call plug#end()
 
 " colors
