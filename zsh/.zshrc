@@ -2,6 +2,8 @@
 export ZSH_CACHE_DIR=~/.zsh/
 export KEYTIMEOUT=1
 export TERM=xterm-256color
+path+=($HOME/.bin)
+export PATH
 
 # Load plugins from antibody
 source ~/.zsh-plugins.sh
