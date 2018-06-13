@@ -3,6 +3,11 @@
 # Filesystem setup
 mkdir -p ~/.config
 mkdir -p ~/.bin
+mkdir -p ~/.ssh
+
+# ssh
+echo "AddKeysToAgent yes" >> ~/.ssh/config
+chmod 755 ~/.ssh/config
 
 # diff-so-fancy
 curl -o ~/.bin/diff-so-fancy https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
