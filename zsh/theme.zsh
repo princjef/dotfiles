@@ -91,8 +91,10 @@ vi_mode_prompt_info () {
     fi
 }
 
+ICON_CODEPOINT_CHEVRON_RIGHT=`echo "\uf054"`
+
 function zle-line-init zle-keymap-select {
-    PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})»%f " # Display a red prompt char on failure
+    PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})$ICON_CODEPOINT_CHEVRON_RIGHT%f " # Display a red prompt char on failure
     RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
     zle reset-prompt
 }
@@ -102,7 +104,7 @@ zle -N zle-keymap-select
 
 # Define prompts
 #
-PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})»%f " # Display a red prompt char on failure
+PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})$ICON_CODEPOINT_CHEVRON_RIGHT%f " # Display a red prompt char on failure
 RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 
 # ------------------------------------------------------------------------------
@@ -113,8 +115,6 @@ RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 # %a => current action (rebase/merge)
 # %s => current version control system
 # %r => name of the root directory of the repository
-# %S => current path relative to the repository root directory
-# %m => in case of Git, show information about stashes
 # %u => show unstaged changes in the repository
 # %c => show staged changes in the repository
 #
@@ -130,3 +130,5 @@ RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 # %(?..) => prompt conditional - %(condition.true.false)
 #
 # ------------------------------------------------------------------------------
+#!/usr/bin/env zsh
+

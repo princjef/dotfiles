@@ -2,8 +2,8 @@ robbyrussell/oh-my-zsh folder:plugins/git
 robbyrussell/oh-my-zsh folder:plugins/docker
 robbyrussell/oh-my-zsh folder:plugins/docker-compose
 robbyrussell/oh-my-zsh folder:plugins/node
-robbyrussell/oh-my-zsh folder:plugins/npm
 
+lukechilds/zsh-better-npm-completion
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions
 zsh-users/zsh-syntax-highlighting
