@@ -33,7 +33,7 @@ ICON_UNLINK=`echo "\uf127"`
 ICON_STAR=`echo "\uf41e"`
 ICON_DOT=`echo "\uf444"`
 ICON_PLUS=`echo "\uf44d"`
-ICON_BRANCH=`echo "\ue0a0"`
+ICON_BRANCH=`echo "\uf418"`
 
 # Set required options
 #
@@ -42,6 +42,7 @@ setopt prompt_subst
 # Load required modules
 #
 autoload -Uz vcs_info
+autoload -Uz async && async
 
 # Set vcs_info parameters
 #
