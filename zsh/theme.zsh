@@ -26,6 +26,13 @@ ICON_INFO=`echo "\ufb4d"`
 ICON_GITHUB=`echo "\uf7a3"`
 ICON_VSTS=`echo "\ufb0f"`
 ICON_GIT=`echo "\uf7a1"`
+ICON_UP_CHEVRON=`echo "\uf077"`
+ICON_DOWN_CHEVRON=`echo "\uf078"`
+ICON_COMMIT=`echo "\ue729"`
+ICON_UNLINK=`echo "\uf127"`
+ICON_STAR=`echo "\uf41e"`
+ICON_DOT=`echo "\uf444"`
+ICON_PLUS=`echo "\uf44d"`
 
 # Set required options
 #
@@ -40,7 +47,7 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*:*' max-exports 4
 zstyle ':vcs_info:*:*' formats "$FX[bold]%r$FX[no-bold]/%S" "%b" "" "%s"
-zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r$FX[no-bold]/%S" "%b" "(%a)" "%s"
+zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r$FX[no-bold]/%S" "%b" "%a" "%s"
 zstyle ':vcs_info:*:*' nvcsformats "%~" "" "" ""
 
 # Fastest possible way to check if repo is dirty
@@ -63,13 +70,21 @@ branch_info() {
 }
 
 mod_info() {
-    local added=$(git_added_count)
-    local modified=$(git_modified_count)
-    local deleted=$(git_deleted_count)
-    if [[ $added -ne 0 || $modified -ne 0 || $deleted -ne 0 ]]; then
-        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{green}+$added %F{yellow}~$modified %F{red}-$deleted%f %k"
+    local staged=$(git_staged_count)
+    local unstaged=$(git_unstaged_count)
+    local untracked=$(git_untracked_count)
+    if [[ $staged -ne 0 || $unstaged -ne 0 || $untracked -ne 0 ]]; then
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{green}${ICON_STAR}$staged %F{yellow}${ICON_DOT}$unstaged %F{202}${ICON_PLUS}$untracked%f %k"
     else
         echo ""
+    fi
+}
+
+commit_info() {
+    if $(git_has_remote); then
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{252}$ICON_COMMIT %F{green}${ICON_UP_CHEVRON}$(git_ahead_count) %F{red}${ICON_DOWN_CHEVRON}$(git_behind_count)%f %k"
+    else
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{252}$ICON_UNLINK%f %k"
     fi
 }
 
@@ -112,22 +127,38 @@ vi_mode_prompt_info () {
     fi
 }
 
-git_modified_count() {
+git_unstaged_count() {
     local -a files
-    files=($(git ls-files --modified --exclude-standard))
+    files=($(git ls-files --modified --deleted --exclude-standard -- $(git rev-parse --show-toplevel)))
     print $#files
 }
 
-git_added_count() {
+git_untracked_count() {
     local -a files
-    files=($(git ls-files --others --exclude-standard))
+    files=($(git ls-files --others --exclude-standard -- $(git rev-parse --show-toplevel)))
     print $#files
 }
 
-git_deleted_count() {
+git_staged_count() {
     local -a files
-    files=($(git ls-files --deleted --exclude-standard))
+    files=($(git diff --name-only --staged))
     print $#files
+}
+
+git_has_remote() {
+    git rev-parse --verify $vcs_info_msg_1_@{upstream} &> /dev/null
+}
+
+git_ahead_count() {
+    local -a commits
+    commits=($(git rev-list $vcs_info_msg_1_@{upstream}..HEAD))
+    print $#commits
+}
+
+git_behind_count() {
+    local -a commits
+    commits=($(git rev-list HEAD..$vcs_info_msg_1_@{upstream}))
+    print $#commits
 }
 
 git_remote_is_github() {
@@ -154,7 +185,11 @@ git_remote_icon() {
 
 right_prompt() {
     if [[ ${vcs_info_msg_3_} = 'git' ]]; then
-        print "$(vi_mode_prompt_info) %F{252}$ICON_POWERLINE_LEFT%f%K{252} %F{bold}$(branch_info)%f $(mod_info)%k"
+        local trailer=$(mod_info)
+        if [ -z "$trailer" ]; then
+            trailer=$(commit_info)
+        fi
+        print "$(vi_mode_prompt_info) %F{252}$ICON_POWERLINE_LEFT%f%K{252} %F{bold}$(branch_info)%f $trailer%k"
     else
         print "$(vi_mode_prompt_info) %k"
     fi
