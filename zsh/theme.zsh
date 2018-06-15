@@ -20,6 +20,9 @@
 #
 # ------------------------------------------------------------------------------
 
+# ZSH indents the right prompt by 1 by default. Remove that
+ZLE_RPROMPT_INDENT=0
+
 ICON_POWERLINE_LEFT=`echo "\ue0b2"`
 ICON_CHEVRON_RIGHT=`echo "\uf054"`
 ICON_INFO=`echo "\ufb4d"`
