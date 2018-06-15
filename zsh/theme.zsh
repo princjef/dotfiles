@@ -33,6 +33,7 @@ ICON_UNLINK=`echo "\uf127"`
 ICON_STAR=`echo "\uf41e"`
 ICON_DOT=`echo "\uf444"`
 ICON_PLUS=`echo "\uf44d"`
+ICON_BRANCH=`echo "\ue0a0"`
 
 # Set required options
 #
@@ -172,13 +173,14 @@ git_remote_is_vsts() {
 git_remote_icon() {
     local icon=""
     if [[ ${vcs_info_msg_3_} = 'git' ]]; then
-        if $(git_remote_is_github); then
-            icon="$ICON_GITHUB "
-        elif $(git_remote_is_vsts); then
-            icon="$ICON_VSTS "
-        else
-            icon="$ICON_GIT "
-        fi
+        # if $(git_remote_is_github); then
+        #     icon="$ICON_GITHUB "
+        # elif $(git_remote_is_vsts); then
+        #     icon="$ICON_VSTS "
+        # else
+        #     icon="$ICON_GIT "
+        # fi
+        icon="$ICON_BRANCH "
     fi
     print $icon
 }
