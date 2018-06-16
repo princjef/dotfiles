@@ -45,20 +45,20 @@ Plug 'vim-airline/vim-airline-themes'	" Themes for vim-airline
 
 " deoplete (asynchronous autocomplete) and friends
 Plug 'Shougo/deoplete.nvim'
-Plug 'Shougo/deol.nvim'								" Neovim shell?
-Plug 'Shougo/denite.nvim'							" United search interface with :Denite?
-Plug 'Shougo/neomru.vim'							" MRU for unite/denite
-Plug 'Shougo/context_filetype.vim'					" Context filetype library for Vim script
-Plug 'Shougo/neco-vim', {'on_ft': 'vim'}			" Deoplete for vim files
-Plug 'Shougo/neoinclude.vim'						" Includes for deoplete?
-Plug 'zchee/deoplete-jedi', {'on_ft': 'python'}		" Deoplete for python (uses the jedi tool for python)
-Plug 'zchee/deoplete-zsh'							" Deoplete for zsh
-Plug 'Valodim/vim-zsh-completion'					" More zsh completion
-Plug 'mhartington/nvim-typescript'					" Typescript deoplete integration
-Plug 'Shougo/neosnippet.vim'						" Snippet support (integrates with deoplete)
-Plug 'Shougo/neosnippet-snippets'					" Collection of snippets for certain languages integrated with above
-Plug 'honza/vim-snippets'							" More snippets for various languages
-Plug 'Shougo/echodoc.vim'							" Shows documentation for function signatures while typing
+Plug 'Shougo/deol.nvim'								        " Neovim shell?
+Plug 'Shougo/denite.nvim'							        " United search interface with :Denite?
+Plug 'Shougo/neomru.vim'							        " MRU for unite/denite
+Plug 'Shougo/context_filetype.vim'					        " Context filetype library for Vim script
+Plug 'Shougo/neco-vim', {'on_ft': 'vim'}			        " Deoplete for vim files
+Plug 'Shougo/neoinclude.vim'						        " Includes for deoplete?
+Plug 'zchee/deoplete-jedi', {'on_ft': 'python'}		        " Deoplete for python (uses the jedi tool for python)
+Plug 'zchee/deoplete-zsh'							        " Deoplete for zsh
+Plug 'Valodim/vim-zsh-completion'					        " More zsh completion
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}  " Typescript deoplete integration
+Plug 'Shougo/neosnippet.vim'						        " Snippet support (integrates with deoplete)
+Plug 'Shougo/neosnippet-snippets'					        " Collection of snippets for certain languages integrated with above
+Plug 'honza/vim-snippets'							        " More snippets for various languages
+Plug 'Shougo/echodoc.vim'							        " Shows documentation for function signatures while typing
 
 Plug 'mhinz/vim-sayonara'				" Makes closing a tab act like normal programs
 Plug 'terryma/vim-multiple-cursors'		" Like SublimeText multiple cursors
@@ -80,8 +80,8 @@ set number relativenumber
 set clipboard+=unnamedplus
 syntax enable
 set tabstop=4 shiftwidth=4 expandtab	" add exapndtab to replace tab with spaces
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1		" Allow cursor shape to change
 
+set ttimeout ttimeoutlen=2              " Attempt to fix occasional hanging: https://github.com/neovim/neovim/issues/2454
 set noshowmode							" Hide default text indicating mode and status (so that airline can show it)
 filetype on
 set laststatus=2						" Always show a status line uder the window

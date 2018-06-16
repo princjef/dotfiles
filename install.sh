@@ -82,16 +82,18 @@ sudo n lts
 ##########
 
 # Install (Debian-based only)
-sudo add-apt-repository ppa:neovim-ppa/unstable
+sudo add-apt-repository ppa:neovim-ppa/stable
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y neovim \
     python-dev python-pip \
     python3-dev python3-pip
 pip3 install neovim
+pip install neovim
 
 # Extra installations for neovim
 pip3 install typing # Denite
+sudo npm i -g neovim # Node.js client
 sudo npm i -g typescript # Nvim-typescript
 sudo npm i -g typescript-formatter # Neoformat
 sudo npm i -g tern # Javascript support
