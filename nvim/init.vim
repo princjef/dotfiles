@@ -71,6 +71,7 @@ call plug#end()
 " colors
 set termguicolors
 colorscheme molokai
+let &colorcolumn=join(range(80,999),",")
 
 " settings
 set number relativenumber
