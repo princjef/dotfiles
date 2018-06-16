@@ -66,6 +66,8 @@ Plug 'tyru/open-browser.vim'			" Open link in a web browser from vim
 Plug 'junegunn/vim-easy-align'			" Align around certain characters (like these comments)
 Plug 'MartinLafreniere/vim-PairTools'	" Does things like autoclosing and autoa tabbing
 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
+
 call plug#end()
 
 " colors
@@ -175,11 +177,11 @@ autocmd CompleteDone * pclose
 " Use tab to select the option we want
 inoremap <silent><expr><tab> pumvisible() ? "\<return>" : "\<tab>"
 
-call deoplete#custom#set('buffer', 'mark', 'buffer')
-call deoplete#custom#set('ternjs', 'mark', '')
-call deoplete#custom#set('typescript', 'mark', '')
-call deoplete#custom#set('omni', 'mark', 'omni')
-call deoplete#custom#set('file', 'mark', 'file')
+call deoplete#custom#source('buffer', 'mark', 'buffer')
+call deoplete#custom#source('ternjs', 'mark', '')
+call deoplete#custom#source('typescript', 'mark', '')
+call deoplete#custom#source('omni', 'mark', 'omni')
+call deoplete#custom#source('file', 'mark', 'file')
 
 function! Preview_func()
 	if &pvw
@@ -187,7 +189,7 @@ function! Preview_func()
 	endif
 endfunction
 autocmd WinEnter * call Preview_func()
-call deoplete#custom#set('_', 'matchers', ['matcher_fuzzy'])
+call deoplete#custom#source('_', 'matchers', ['matcher_fuzzy'])
 
 " Denite configuration (unified finder for neovim)
 autocmd FileType unite call s:uniteinit()

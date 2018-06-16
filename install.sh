@@ -1,21 +1,63 @@
 #!/bin/bash
 
+# Filesystem setup
+mkdir -p ~/.config
+mkdir -p ~/.bin
+mkdir -p ~/.ssh
+
+# ssh
+echo "AddKeysToAgent yes" >> ~/.ssh/config
+chmod 755 ~/.ssh/config
+
+# diff-so-fancy
+curl -o ~/.bin/diff-so-fancy https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
+chmod +x ~/.bin/diff-so-fancy
+
+##########
+# git
+##########
+sudo apt-get install -y git
+git config --global alias.can 'commit --amend --no-edit'
+git config --global alias.pf 'push --force-with-lease'
+
+git config --global core.pager 'diff-so-fancy | less --tabs=4 -RFX'
+
+git config --global color.ui true
+
+git config --global color.diff-highlight.oldNormal    'red bold'
+git config --global color.diff-highlight.oldHighlight 'red bold 52'
+git config --global color.diff-highlight.newNormal    'green bold'
+git config --global color.diff-highlight.newHighlight 'green bold 22'
+
+git config --global color.diff.meta       'yellow'
+git config --global color.diff.frag       'magenta bold'
+git config --global color.diff.commit     'yellow bold'
+git config --global color.diff.old        'red bold'
+git config --global color.diff.new        'green bold'
+git config --global color.diff.whitespace 'red reverse'
+
 ##########
 # zsh
 ##########
 
 # Install zsh (Linux only)
-sudo apt-get install -y zsh git
+sudo apt-get install -y zsh
 
-# Antigen
-curl -L git.io/antigen > ~/.zsh/antigen.zsh
+# Antibody
+curl -sL git.io/antibody | sh -s
 
 # For whatever extra stuff we need
 mkdir -p ~/.zsh/custom/plugins
 touch ~/.zsh/custom/additional.zsh
 
 # Symlink zshrc
-ln -s $(pwd)/zsh/.zshrc ~/.zshrc
+ln -sfn $(pwd)/zsh/.zshrc ~/.zshrc
+
+# Create static antibody bundle
+antibody bundle < $(pwd)/zsh/plugins.txt > ~/.zsh-plugins.sh
+
+# Load zsh
+chsh -s $(which zsh)
 
 ##########
 # Node.JS
@@ -26,14 +68,14 @@ command -v node > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo 'Node not found. Installing 8.x...'
     curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    sudo apt install -y nodejs
 else
     echo 'Node is already installed'
 fi
 
 # Node version management
 sudo npm i -g n
-sudo n stable
+sudo n lts
 
 ##########
 # Neovim
@@ -41,9 +83,9 @@ sudo n stable
 
 # Install (Debian-based only)
 sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get install -y neovim \
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y neovim \
     python-dev python-pip \
     python3-dev python3-pip
 pip3 install neovim
@@ -59,7 +101,7 @@ nvim -c 'PlugInstall | PlugUpdate'
 nvim -c 'UpdateRemotePlugins'
 
 # link to the right place
-ln -s $(pwd)/nvim ~/.config/nvim
+ln -sfn $(pwd)/nvim ~/.config/nvim
 
 # Use as the default editor for git
 git config --global core.editor nvim
@@ -77,14 +119,14 @@ else
         echo 'Found an existing installation of tmux. Removing it...'
 
         # Debian-based only
-        sudo apt-get remove tmux
+        sudo apt remove tmux
     fi
 
     echo 'Installing tmux'
     sudo apt-get install -y libevent-dev libncurses-dev build-essential
-    wget https://github.com/tmux/tmux/releases/download/2.6/tmux-2.6.tar.gz
-    tar -xzvf tmux-2.6.tar.gz
-    cd tmux-2.6
+    wget https://github.com/tmux/tmux/releases/download/2.7/tmux-2.7.tar.gz
+    tar -xzvf tmux-2.7.tar.gz
+    cd tmux-2.7
     ./configure && make
     sudo make install
     cd -
@@ -97,4 +139,4 @@ else
 fi
 
 # link things to the right places
-ln -s $(pwd)/tmux/tmux.conf ~/.tmux.conf
+ln -sfn $(pwd)/tmux/tmux.conf ~/.tmux.conf

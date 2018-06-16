@@ -20,6 +20,24 @@
 #
 # ------------------------------------------------------------------------------
 
+# ZSH indents the right prompt by 1 by default. Remove that
+ZLE_RPROMPT_INDENT=0
+
+ICON_POWERLINE_LEFT=`echo "\ue0b2"`
+ICON_CHEVRON_RIGHT=`echo "\uf054"`
+ICON_INFO=`echo "\ufb4d"`
+ICON_GITHUB=`echo "\uf7a3"`
+ICON_VSTS=`echo "\ufb0f"`
+ICON_GIT=`echo "\uf7a1"`
+ICON_UP_CHEVRON=`echo "\uf077"`
+ICON_DOWN_CHEVRON=`echo "\uf078"`
+ICON_COMMIT=`echo "\ue729"`
+ICON_UNLINK=`echo "\uf127"`
+ICON_STAR=`echo "\uf41e"`
+ICON_DOT=`echo "\uf444"`
+ICON_PLUS=`echo "\uf44d"`
+ICON_BRANCH=`echo "\uf418"`
+
 # Set required options
 #
 setopt prompt_subst
@@ -27,15 +45,15 @@ setopt prompt_subst
 # Load required modules
 #
 autoload -Uz vcs_info
+autoload -Uz async && async
 
 # Set vcs_info parameters
 #
-zstyle ':vcs_info:*' enable hg bzr git
-zstyle ':vcs_info:*:*' unstagedstr '!'
-zstyle ':vcs_info:*:*' stagedstr '+'
-zstyle ':vcs_info:*:*' formats "$FX[bold]%r$FX[no-bold]/%S" "%s/%b" "%%u%c"
-zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r$FX[no-bold]/%S" "%s/%b" "%u%c (%a)"
-zstyle ':vcs_info:*:*' nvcsformats "%~" "" ""
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*:*' max-exports 4
+zstyle ':vcs_info:*:*' formats "$FX[bold]%r$FX[no-bold]/%S" "%b" "" "%s"
+zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r$FX[no-bold]/%S" "%b" "%a" "%s"
+zstyle ':vcs_info:*:*' nvcsformats "%~" "" "" ""
 
 # Fastest possible way to check if repo is dirty
 #
@@ -49,7 +67,30 @@ git_dirty() {
 # Display information about the current repository
 #
 repo_information() {
-    echo "%F{131}${vcs_info_msg_0_%%/.} %F{8}$vcs_info_msg_1_`git_dirty` $vcs_info_msg_2_%f"
+    echo "%F{80}${vcs_info_msg_0_%%/.} %f"
+}
+
+branch_info() {
+    echo "%F{8}$(git_remote_icon)$vcs_info_msg_1_%f"
+}
+
+mod_info() {
+    local staged=$(git_staged_count)
+    local unstaged=$(git_unstaged_count)
+    local untracked=$(git_untracked_count)
+    if [[ $staged -ne 0 || $unstaged -ne 0 || $untracked -ne 0 ]]; then
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{green}${ICON_STAR}$staged %F{yellow}${ICON_DOT}$unstaged %F{202}${ICON_PLUS}$untracked%f %k"
+    else
+        echo ""
+    fi
+}
+
+commit_info() {
+    if $(git_has_remote); then
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{252}$ICON_COMMIT %F{green}${ICON_UP_CHEVRON}$(git_ahead_count) %F{red}${ICON_DOWN_CHEVRON}$(git_behind_count)%f %k"
+    else
+        echo "%F{8}$ICON_POWERLINE_LEFT%K{8} %F{252}$ICON_UNLINK%f %k"
+    fi
 }
 
 # Get the initial timestamp for cmd_exec_time
@@ -85,15 +126,84 @@ precmd() {
 vi_mode_prompt_info () {
     if [[ ${KEYMAP} = 'vicmd' ]]
     then
-        echo "%F{178}N%f"
+        echo "%F{178}$ICON_POWERLINE_LEFT%f%K{178} %F{8}N%f"
     else
-        echo "%F{74}I%f"
+        echo "%F{74}$ICON_POWERLINE_LEFT%f%K{74} %F{8}I%f"
+    fi
+}
+
+git_unstaged_count() {
+    local -a files
+    files=($(git ls-files --modified --deleted --exclude-standard -- $(git rev-parse --show-toplevel)))
+    print $#files
+}
+
+git_untracked_count() {
+    local -a files
+    files=($(git ls-files --others --exclude-standard -- $(git rev-parse --show-toplevel)))
+    print $#files
+}
+
+git_staged_count() {
+    local -a files
+    files=($(git diff --name-only --staged))
+    print $#files
+}
+
+git_has_remote() {
+    git rev-parse --verify $vcs_info_msg_1_@{upstream} &> /dev/null
+}
+
+git_ahead_count() {
+    local -a commits
+    commits=($(git rev-list $vcs_info_msg_1_@{upstream}..HEAD))
+    print $#commits
+}
+
+git_behind_count() {
+    local -a commits
+    commits=($(git rev-list HEAD..$vcs_info_msg_1_@{upstream}))
+    print $#commits
+}
+
+git_remote_is_github() {
+    git remote --verbose | grep 'origin.\+github.com' > /dev/null
+}
+
+git_remote_is_vsts() {
+    git remote --verbose | grep 'origin.\+visualstudio.com' > /dev/null
+}
+
+git_remote_icon() {
+    local icon=""
+    if [[ ${vcs_info_msg_3_} = 'git' ]]; then
+        # if $(git_remote_is_github); then
+        #     icon="$ICON_GITHUB "
+        # elif $(git_remote_is_vsts); then
+        #     icon="$ICON_VSTS "
+        # else
+        #     icon="$ICON_GIT "
+        # fi
+        icon="$ICON_BRANCH "
+    fi
+    print $icon
+}
+
+right_prompt() {
+    if [[ ${vcs_info_msg_3_} = 'git' ]]; then
+        local trailer=$(mod_info)
+        if [ -z "$trailer" ]; then
+            trailer=$(commit_info)
+        fi
+        print "$(vi_mode_prompt_info) %F{252}$ICON_POWERLINE_LEFT%f%K{252} %F{bold}$(branch_info)%f $trailer%k"
+    else
+        print "$(vi_mode_prompt_info) %k"
     fi
 }
 
 function zle-line-init zle-keymap-select {
-    PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})»%f " # Display a red prompt char on failure
-    RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
+    PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f%(?.%F{magenta}.%F{red})❯%f " # Display a red prompt char on failure
+    RPROMPT="$(right_prompt)"
     zle reset-prompt
 }
 
@@ -102,8 +212,8 @@ zle -N zle-keymap-select
 
 # Define prompts
 #
-PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f$(vi_mode_prompt_info) %(?.%F{magenta}.%F{red})»%f " # Display a red prompt char on failure
-RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
+PROMPT="$(repo_information)%F{yellow}$cmd_execution_time%f%(?.%F{magenta}.%F{red})❯%f " # Display a red prompt char on failure
+RPROMPT="$(right_prompt)"
 
 # ------------------------------------------------------------------------------
 #
@@ -113,9 +223,6 @@ RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 # %a => current action (rebase/merge)
 # %s => current version control system
 # %r => name of the root directory of the repository
-# %S => current path relative to the repository root directory
-# %m => in case of Git, show information about stashes
-# %u => show unstaged changes in the repository
 # %c => show staged changes in the repository
 #
 # List of prompt format strings:
@@ -130,3 +237,6 @@ RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 # %(?..) => prompt conditional - %(condition.true.false)
 #
 # ------------------------------------------------------------------------------
+#!/usr/bin/env zsh
+
+#!/usr/bin/env zsh
