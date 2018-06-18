@@ -23,6 +23,7 @@ else
 fi
 git config --global alias.can 'commit --amend --no-edit'
 git config --global alias.pf 'push --force-with-lease'
+git config --global alias.pu '!sh -c "git push -u origin $(git rev-parse --abbrev-ref HEAD)"'
 
 git config --global core.pager 'diff-so-fancy | less --tabs=4 -RFX'
 
