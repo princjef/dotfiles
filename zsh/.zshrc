@@ -1,3 +1,7 @@
+# Autoload
+autoload -Uz compinit
+compinit -i
+
 # Environment
 export ZSH_CACHE_DIR=~/.zsh/
 export KEYTIMEOUT=1
