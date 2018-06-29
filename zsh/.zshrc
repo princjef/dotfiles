@@ -9,6 +9,14 @@ export TERM=xterm-256color
 path+=($HOME/.bin)
 export PATH
 
+# History
+HISTSIZE=50000          # Number of lines of history to keep in memory
+HISTFILE=~/.zsh_history # Location of history file
+SAVEHIST=50000          # Number of history entries to save to disk
+setopt appendhistory    # Append history to the history file (no overwriting)
+setopt sharehistory     # Share history across terminals
+setopt incappendhistory # Immediately append to history file, not just on kill
+
 # Load plugins from antibody
 source ~/.zsh-plugins.sh
 
