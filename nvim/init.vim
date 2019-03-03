@@ -13,7 +13,7 @@ Plug 'hail2u/vim-css3-syntax', { 'on_ft': ['css', 'scss'] }
 Plug 'ap/vim-css-color'
 Plug 'tpope/vim-markdown', { 'on_ft': 'markdown' }
 Plug 'tyru/markdown-codehl-onthefly.vim'
-Plug 'HerringtonDarkholme/yats.vim'
+Plug 'leafgarland/typescript-vim'
 Plug 'itmammoth/doorboy.vim'
 Plug 'valloric/MatchTagAlways', { 'on_ft': 'html' }
 Plug 'tomtom/tcomment_vim'				" Comment with gc
@@ -146,6 +146,7 @@ let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 let g:nvim_typescript#max_completion_detail = 100
 map <silent> <leader>D :TSDoc<cr>
+nnoremap gd :TSDef<cr>
 
 " Git
 vnoremap <leader>gb :Gblame<cr>
@@ -252,6 +253,7 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers=1
 let g:airline#extensions#tabline#fnamemod=':t'
+let g:airline#extensions#tabline#buffer_idx_mode=1
 let g:airline_skip_empty_sections=1
 set hidden " allow buffers to be hidden without closing
 let g:airline_powerline_fonts=1
