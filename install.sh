@@ -65,6 +65,9 @@ ln -sfn $(pwd)/zsh/.zshrc ~/.zshrc
 # Load zsh
 chsh -s $(which zsh)
 
+# Setup antibody bundle
+antibody bundle < zsh/plugins.txt > ~/.zsh-plugins.sh
+
 ##########
 # Node.JS
 ##########
@@ -128,7 +131,7 @@ git config --global core.editor nvim
 #########
 
 # Uninstall the old (bundled) version
-if [[ $(tmux -V) = *2.6 ]]; then
+if [[ $(tmux -V) = *2.7 ]]; then
     echo 'Tmux is already at the correct version'
 else
     if [ $(uname -s) = "Darwin" ]; then

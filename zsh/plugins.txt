@@ -1,7 +1,7 @@
-robbyrussell/oh-my-zsh folder:plugins/git
-robbyrussell/oh-my-zsh folder:plugins/docker
-robbyrussell/oh-my-zsh folder:plugins/docker-compose
-robbyrussell/oh-my-zsh folder:plugins/node
+robbyrussell/oh-my-zsh path:plugins/git
+robbyrussell/oh-my-zsh path:plugins/docker
+robbyrussell/oh-my-zsh path:plugins/docker-compose
+robbyrussell/oh-my-zsh path:plugins/node
 
 mafredri/zsh-async
 lukechilds/zsh-better-npm-completion
