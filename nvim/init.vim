@@ -40,6 +40,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'	" Coloring for file tree icons
 Plug 'editorconfig/editorconfig-vim'	" Generic editor config
 Plug 'tpope/vim-repeat'					" Gives other plugins repeat capabilities
 Plug 'tpope/vim-surround'				" Manage delimiters (cs to replace)
+Plug 'tpope/vim-sleuth'                 " Automatically detect indentation
 Plug 'vim-airline/vim-airline'			" Bottom status/tabline (colors on insert line and such)
 Plug 'vim-airline/vim-airline-themes'	" Themes for vim-airline
 
@@ -79,7 +80,7 @@ let &colorcolumn=join(range(80,999),",")
 set number relativenumber
 set clipboard+=unnamedplus
 syntax enable
-set tabstop=4 shiftwidth=4 expandtab	" add exapndtab to replace tab with spaces
+set tabstop=4 shiftwidth=0 expandtab    " add exapndtab to replace tab with spaces
 
 set ttimeout ttimeoutlen=2              " Attempt to fix occasional hanging: https://github.com/neovim/neovim/issues/2454
 set noshowmode							" Hide default text indicating mode and status (so that airline can show it)
