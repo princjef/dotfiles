@@ -61,6 +61,7 @@ touch ~/.zsh/custom/additional.zsh
 
 # Symlink zshrc
 ln -sfn $(pwd)/zsh/.zshrc ~/.zshrc
+ln -sfn $(pwd)/zsh/.zprofile ~/.zprofile
 
 # Load zsh
 chsh -s $(which zsh)
@@ -87,8 +88,7 @@ else
 fi
 
 # Node version management
-sudo npm i -g n
-sudo n lts
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
 ##########
 # Neovim
@@ -111,10 +111,10 @@ pip install neovim
 
 # Extra installations for neovim
 pip3 install typing # Denite
-sudo npm i -g neovim # Node.js client
-sudo npm i -g typescript # Nvim-typescript
-sudo npm i -g typescript-formatter # Neoformat
-sudo npm i -g tern # Javascript support
+npm i -g neovim # Node.js client
+npm i -g typescript # Nvim-typescript
+npm i -g prettier # Neoformat
+npm i -g tern # Javascript support
 
 # link to the right place
 ln -sfn $(pwd)/nvim ~/.config/nvim

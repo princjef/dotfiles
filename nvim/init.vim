@@ -89,6 +89,9 @@ set laststatus=2						" Always show a status line uder the window
 set wrap linebreak nolist				" Wraps on a reasonable character (think word boundary)
 let mapleader=","
 
+" mouse in tmux
+set mouse=a
+
 " undo
 set undofile
 set undodir="$HOME/.VIM_UNDO_FILES"
