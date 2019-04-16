@@ -365,6 +365,31 @@ commit_info() {
     fi
 }
 
+# turns seconds into human readable time
+# 165392 => 1d 21h 56m 32s
+# https://github.com/sindresorhus/pretty-time-zsh
+prompt_pretty_time() {
+	local human total_seconds=$1
+	local days=$(( total_seconds / 60 / 60 / 24 ))
+	local hours=$(( total_seconds / 60 / 60 % 24 ))
+	local minutes=$(( total_seconds / 60 % 60 ))
+	local seconds=$(( total_seconds % 60 ))
+	if (( days > 0 )); then
+        human="${days}d"
+        (( hours > 0 )) && human+=" ${hours}h"
+    elif (( hours > 0 )); then
+        human="${hours}h"
+        (( minutes > 0 )) && human+=" ${minutes}m"
+    elif (( minutes > 0 )); then
+        human="${minutes}m"
+        (( seconds > 0 )) && human+=" ${seconds}s"
+    else
+        human="${seconds}s"
+    fi
+
+    print $human
+}
+
 #####################
 # Init / Runtime
 #####################
@@ -390,7 +415,7 @@ prompt_precmd() {
     local start=${cmd_timestamp:-$cmd_timing_stop}
     let local elapsed=$cmd_timing_stop-$start
     if [ $elapsed -gt 5 ]; then
-        cmd_execution_time="${elapsed}s "
+        cmd_execution_time="$(prompt_pretty_time $elapsed) "
     else
         cmd_execution_time=''
     fi
