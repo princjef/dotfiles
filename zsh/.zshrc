@@ -26,6 +26,17 @@ source ~/dotfiles/zsh/theme.zsh
 # Load extra plugins
 source ~/.zsh/custom/additional.zsh
 
+# Handle colorings
+if $(ls -G . &> /dev/null); then
+    alias ls='ls -G'
+elif $(ls --color -d . &> /dev/null); then
+    alias ls='ls --color=tty'
+fi
+
+if [[ -n $LS_COLORS ]]; then
+    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+fi
+
 # Bindings
 bindkey -v # Vim mode
 bindkey '^?' backward-delete-char # Fix backspace
