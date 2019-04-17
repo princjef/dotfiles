@@ -250,7 +250,7 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
             \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
             \ '.hg/', '.git/', '.bzr/', '.svn/',
             \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby',
-            \ '.idea/', 'dist/',
+            \ '.idea/', 'dist/', 'temp/', 'coverage/', '.nyc_output/',
             \ 'tags', 'tags-*'])
 
 " vim-airline configuration
