@@ -24,6 +24,8 @@ Plug 'carlitux/deoplete-ternjs', { 'on_ft': 'javascript' }
 Plug 'maksimr/vim-jsbeautify'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'dense-analysis/ale'				" Linter
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -60,6 +62,7 @@ Plug 'Shougo/neosnippet.vim'						        " Snippet support (integrates with deo
 Plug 'Shougo/neosnippet-snippets'					        " Collection of snippets for certain languages integrated with above
 Plug 'honza/vim-snippets'							        " More snippets for various languages
 Plug 'Shougo/echodoc.vim'							        " Shows documentation for function signatures while typing
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}		" Deoplete for Go
 
 Plug 'mhinz/vim-sayonara'				" Makes closing a tab act like normal programs
 Plug 'terryma/vim-multiple-cursors'		" Like SublimeText multiple cursors
@@ -136,6 +139,45 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+" Ale Configuration
+" Error and warning signs.
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+
+" Enable integration with airline.
+let g:airline#extensions#ale#enabled = 1
+
+" Golang
+
+" indentation
+au FileType go set noexpandtab
+au FileType go set shiftwidth=4
+au FileType go set softtabstop=4
+au FileType go set tabstop=4
+
+" highlighting
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_auto_sameids = 1
+
+" autoimport
+let g:go_fmt_command = "goimports"
+
+" show types
+let g:go_auto_type_info = 1
+
+" keybindings
+au FileType go nnoremap gd <Plug>(go-def)
+
+" go-deoplete
+let g:deoplete#sources#go#gocode_binary = "~/go/bin/gocode"
+
 " Javascript/Typescript
 
 " heavenshell/vim-jsdoc
@@ -150,7 +192,7 @@ let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 let g:nvim_typescript#max_completion_detail = 100
 map <silent> <leader>D :TSDoc<cr>
-nnoremap gd :TSDef<cr>
+au FileType ts nnoremap gd :TSDef<cr>
 
 " Git
 vnoremap <leader>gb :Gblame<cr>
