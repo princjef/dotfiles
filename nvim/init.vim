@@ -224,6 +224,9 @@ autocmd CompleteDone * pclose
 " Use tab to select the option we want
 inoremap <silent><expr><tab> pumvisible() ? "\<return>" : "\<tab>"
 
+" Use ctrl+space to manually show the completion window
+inoremap <expr><c-Space> deoplete#manual_complete()
+
 call deoplete#custom#source('buffer', 'mark', 'buffer')
 call deoplete#custom#source('ternjs', 'mark', '')
 call deoplete#custom#source('typescript', 'mark', '')
@@ -246,7 +249,7 @@ function! s:uniteinit()
 endfunction
 
 " File finder with Ctrl-P
-noremap <silent> <c-p> :Denite file_rec<cr>
+noremap <silent> <c-p> :Denite file/rec<cr>
 noremap <silent> <c-h> :Denite buffer<cr>
 
 " Git menu for Denite
@@ -286,7 +289,7 @@ let s:menus.git.command_candidates = [
 	\] " Append ' --' after log to get commit info commit buffers
 
 call denite#custom#var('menu', 'menus', s:menus)
-call denite#custom#source('file_rec', 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs'])
+call denite#custom#source('file/rec', 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs'])
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
             \ [ '*~', '*.o', '*.exe', '*.bak',
             \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
