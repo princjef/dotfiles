@@ -166,6 +166,9 @@ let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 let g:go_auto_sameids = 1
 
+au BufRead,BufNewFile *.gohtml set filetype=gohtmltmpl
+au BufRead,BufNewFile *.gotxt set filetype=gotexttmpl
+
 " autoimport
 let g:go_fmt_command = "goimports"
 
