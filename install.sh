@@ -53,7 +53,11 @@ else
 fi
 
 # Antibody
-curl -sL git.io/antibody | sh -s
+if [ $(uname -s) = "Darwin" ]; then
+    brew install getantibody/tap/antibody
+else
+    curl -sfL git.io/antibody | sh -s - -b /usr/local/bin
+fi
 
 # For whatever extra stuff we need
 mkdir -p ~/.zsh/custom/plugins
