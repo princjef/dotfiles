@@ -49,20 +49,21 @@ Plug 'vim-airline/vim-airline-themes'	" Themes for vim-airline
 
 " deoplete (asynchronous autocomplete) and friends
 Plug 'Shougo/deoplete.nvim'
-Plug 'Shougo/deol.nvim'								        " Neovim shell?
-Plug 'Shougo/denite.nvim'							        " United search interface with :Denite?
-Plug 'Shougo/neomru.vim'							        " MRU for unite/denite
-Plug 'Shougo/context_filetype.vim'					        " Context filetype library for Vim script
-Plug 'Shougo/neco-vim', {'on_ft': 'vim'}			        " Deoplete for vim files
-Plug 'Shougo/neoinclude.vim'						        " Includes for deoplete?
+Plug 'Shougo/deol.nvim'						" Neovim shell?
+Plug 'Shougo/denite.nvim'					" United search interface with :Denite?
+Plug 'Shougo/neomru.vim'					" MRU for unite/denite
+Plug 'Shougo/context_filetype.vim'				" Context filetype library for Vim script
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' } 	" Like denite for file/rec but floating window and better
+Plug 'Shougo/neco-vim', {'on_ft': 'vim'}			" Deoplete for vim files
+Plug 'Shougo/neoinclude.vim'					" Includes for deoplete?
 Plug 'zchee/deoplete-jedi', {'on_ft': 'python'}		        " Deoplete for python (uses the jedi tool for python)
-Plug 'zchee/deoplete-zsh'							        " Deoplete for zsh
-Plug 'Valodim/vim-zsh-completion'					        " More zsh completion
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}  " Typescript deoplete integration
-Plug 'Shougo/neosnippet.vim'						        " Snippet support (integrates with deoplete)
-Plug 'Shougo/neosnippet-snippets'					        " Collection of snippets for certain languages integrated with above
-Plug 'honza/vim-snippets'							        " More snippets for various languages
-Plug 'Shougo/echodoc.vim'							        " Shows documentation for function signatures while typing
+Plug 'zchee/deoplete-zsh'					" Deoplete for zsh
+Plug 'Valodim/vim-zsh-completion'				" More zsh completion
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}  	" Typescript deoplete integration
+Plug 'Shougo/neosnippet.vim'					" Snippet support (integrates with deoplete)
+Plug 'Shougo/neosnippet-snippets'				" Collection of snippets for certain languages integrated with above
+Plug 'honza/vim-snippets'					" More snippets for various languages
+Plug 'Shougo/echodoc.vim'					" Shows documentation for function signatures while typing
 Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}		" Deoplete for Go
 
 Plug 'mhinz/vim-sayonara'				" Makes closing a tab act like normal programs
@@ -254,7 +255,39 @@ endfunction
 
 " File finder with Ctrl-P
 noremap <silent> <c-p> :Denite file/rec<cr>
+" noremap <silent> <c-p> :Clap files<cr>
 noremap <silent> <c-h> :Denite buffer<cr>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+	nnoremap <silent><buffer><expr> <CR>    denite#do_map('do_action')
+
+	nnoremap <silent><buffer><expr> <Tab>    denite#do_map('choose_action')
+	nnoremap <silent><buffer><expr> <ESC>   denite#do_map('quit')
+	nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select')
+	nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_settings()
+function s:denite_filter_settings() abort
+	setl nonumber
+	call deoplete#custom#buffer_option('auto_complete', v:false)
+	" nunmap <CR>
+	inoremap <silent><buffer><expr> <ESC> denite#do_map('quit')
+	" inoremap <silent><buffer> <ESC> <Plug>(denite_filter_quit)
+	" imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+	inoremap <silent><buffer> <CR>  <ESC><C-w>p:call denite#call_map('do_action')<CR>
+	" inoremap <silent><buffer> <CR>  <Esc><C-w>p<CR>
+
+	" inoremap <silent><buffer> <Space> <Esc><C-w>p:call denite#call_map()('toggle_select', [])<CR><C-w>pA
+	inoremap <silent><buffer> <Tab>   <Esc><C-w>p:call denite#call_map('choose_action')<CR>
+	inoremap <silent><buffer> <Space> <Esc><C-w>p:call denite#call_map('toggle_select')<CR><C-w>pA
+	inoremap <silent><buffer> <C-j>   <Esc><C-w>p:call cursor(line('.')+1,0)<CR><C-w>pA
+	inoremap <silent><buffer> <C-k>   <Esc><C-w>p:call cursor(line('.')-1,0)<CR><C-w>pA
+endfunction
+
+call denite#custom#map('insert','<C-n>','<denite:move_to_next_line>','noremap')
+call denite#custom#map('insert','<C-p>','<denite:move_to_previous_line>','noremap')
 
 " Git menu for Denite
 let s:menus = {}
