@@ -23,20 +23,20 @@
 # ZSH indents the right prompt by 1 by default. Remove that
 ZLE_RPROMPT_INDENT=0
 
-ICON_POWERLINE_LEFT=`echo "\ue0b2"`
-ICON_CHEVRON_RIGHT=`echo "\uf054"`
-ICON_INFO=`echo "\ufb4d"`
-ICON_GITHUB=`echo "\uf7a3"`
-ICON_VSTS=`echo "\ufb0f"`
-ICON_GIT=`echo "\uf7a1"`
-ICON_UP_CHEVRON=`echo "\uf077"`
-ICON_DOWN_CHEVRON=`echo "\uf078"`
-ICON_COMMIT=`echo "\ue729"`
-ICON_UNLINK=`echo "\uf127"`
-ICON_STAR=`echo "\uf41e"`
-ICON_DOT=`echo "\uf444"`
-ICON_PLUS=`echo "\uf44d"`
-ICON_BRANCH=`echo "\uf418"`
+ICON_POWERLINE_LEFT=`echo ""`
+ICON_CHEVRON_RIGHT=`echo ""`
+ICON_INFO=`echo "ⓘ "`
+ICON_GITHUB=`echo ""`
+ICON_VSTS=`echo ""`
+ICON_GIT=`echo ""`
+ICON_UP_CHEVRON=`echo "↑"`
+ICON_DOWN_CHEVRON=`echo "↓"`
+ICON_COMMIT=`echo "◉"`
+ICON_UNLINK=`echo "∅"`
+ICON_STAR=`echo "*"`
+ICON_DOT=`echo "•"`
+ICON_PLUS=`echo "+"`
+ICON_BRANCH=`echo ""`
 
 # ls coloring (BSD)
 export LSCOLORS="Gxfxcxdxbxegedabagacad"

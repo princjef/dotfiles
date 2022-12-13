@@ -5,6 +5,9 @@ mkdir -p ~/.config
 mkdir -p ~/.bin
 mkdir -p ~/.ssh
 
+# Terminal (Alacritty)
+ln -sfn $(pwd)/alacritty ~/.config/alacritty
+
 # ssh
 [ -z "$(grep "AddKeysToAgent yes" ~/.ssh/config || "")" ] && echo "AddKeysToAgent yes" >> ~/.ssh/config
 chmod 755 ~/.ssh/config
@@ -52,12 +55,16 @@ else
     sudo apt-get install -y zsh
 fi
 
-# Antibody
+# Zinit
+
+# Install svn
 if [ $(uname -s) = "Darwin" ]; then
-    brew install getantibody/tap/antibody
+    brew install subversion
 else
-    curl -sfL git.io/antibody | sh -s - -b /usr/local/bin
+    sudo apt-get install -y subversion
 fi
+
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 # For whatever extra stuff we need
 mkdir -p ~/.zsh/custom/plugins
@@ -70,9 +77,6 @@ ln -sfn $(pwd)/zsh/.zprofile ~/.zprofile
 # Load zsh
 chsh -s $(which zsh)
 
-# Setup antibody bundle
-antibody bundle < zsh/plugins.txt > ~/.zsh-plugins.sh
-
 ##########
 # Node.JS
 ##########
@@ -84,7 +88,7 @@ if [ $? -ne 0 ]; then
     if [ $(uname -s) = "Darwin" ]; then
         brew install node
     else
-        curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+        curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
         sudo apt install -y nodejs
     fi
 else
@@ -92,7 +96,14 @@ else
 fi
 
 # Node version management
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+
+NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+nvm install --lts --reinstall-packages-from=current
+nvm use --lts
+nvm alias default --lts
 
 ##########
 # Golang
@@ -141,7 +152,7 @@ git config --global core.editor nvim
 #########
 
 # Uninstall the old (bundled) version
-if [[ $(tmux -V) = *2.7 ]]; then
+if [[ $(tmux -V) = *3.3a ]]; then
     echo 'Tmux is already at the correct version'
 else
     if [ $(uname -s) = "Darwin" ]; then
@@ -157,9 +168,9 @@ else
 
         echo 'Installing tmux'
         sudo apt-get install -y libevent-dev libncurses-dev build-essential
-        wget https://github.com/tmux/tmux/releases/download/2.7/tmux-2.7.tar.gz
-        tar -xzvf tmux-2.7.tar.gz
-        cd tmux-2.7
+        wget https://github.com/tmux/tmux/releases/download/3.3a/tmux-3.3a.tar.gz
+        tar -xzvf tmux-3.3a.tar.gz
+        cd tmux-3.3a
         ./configure && make
         sudo make install
         cd -
