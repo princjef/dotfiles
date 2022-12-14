@@ -37,6 +37,7 @@ ICON_STAR=`echo "*"`
 ICON_DOT=`echo "•"`
 ICON_PLUS=`echo "+"`
 ICON_BRANCH=`echo ""`
+ICON_SSH=`echo ""`
 
 # ls coloring (BSD)
 export LSCOLORS="Gxfxcxdxbxegedabagacad"
@@ -295,7 +296,7 @@ git_remote_is_vsts() {
 
 left_prompt() {
     # Display a red prompt char on failure
-    print "$(repo_information)%F{yellow}$cmd_execution_time%f%(?.%F{magenta}.%F{red})❯%f "
+    print "$(ssh_info)$(repo_information)%F{yellow}$cmd_execution_time%f%(?.%F{magenta}.%F{red})❯%f "
 }
 
 right_prompt() {
@@ -310,6 +311,14 @@ right_prompt() {
         print "$(vi_mode_prompt_info) %k"
     fi
     unset MATCH MBEGIN MEND
+}
+
+ssh_info() {
+    if [ -z "$SSH_CLIENT" ]; then
+        print ""
+    else
+        print "%K{52} $ICON_SSH ${USERNAME}@$(hostname) %k "
+    fi
 }
 
 git_remote_icon() {
