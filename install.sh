@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Filesystem setup
+printf "\n\033[1mBase Setup\033[0m\n"
 mkdir -p ~/.config
 mkdir -p ~/.bin
 mkdir -p ~/.ssh
@@ -13,16 +14,18 @@ ln -sfn $(pwd)/alacritty ~/.config/alacritty
 chmod 755 ~/.ssh/config
 
 # diff-so-fancy
+printf "\n\033[1mInstalling diff-so-fancy\033[0m\n"
 curl -o ~/.bin/diff-so-fancy https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
 chmod +x ~/.bin/diff-so-fancy
 
 ##########
 # git
 ##########
+printf "\n\033[1mInstalling and configuring git\033[0m\n"
 if [ $(uname -s) = "Darwin" ]; then
     brew install git
 else
-    sudo apt-get install -y git
+    sudo apt install -y git
 fi
 git config --global alias.can 'commit --amend --no-edit'
 git config --global alias.pf 'push --force-with-lease'
@@ -44,24 +47,30 @@ git config --global color.diff.old        'red bold'
 git config --global color.diff.new        'green bold'
 git config --global color.diff.whitespace 'red reverse'
 
+git config --system core.longpaths true
+
 ##########
 # zsh
 ##########
+
+printf "\n\033[1mInstalling zsh\033[0m\n"
 
 # Install zsh (Linux only)
 if [ $(uname -s) = "Darwin" ]; then
     brew install zsh
 else
-    sudo apt-get install -y zsh
+    sudo apt install -y zsh
 fi
 
 # Zinit
+
+printf "\n\033[1mSetting up zinit for zsh\033[0m\n"
 
 # Install svn
 if [ $(uname -s) = "Darwin" ]; then
     brew install subversion
 else
-    sudo apt-get install -y subversion
+    sudo apt install -y subversion
 fi
 
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
@@ -77,43 +86,43 @@ ln -sfn $(pwd)/zsh/.zprofile ~/.zprofile
 # Load zsh
 chsh -s $(which zsh)
 
+source ~/.zshrc
+
 ##########
 # Node.JS
 ##########
 
-# Install if not already present
-command -v node > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    echo 'Node not found. Installing...'
-    if [ $(uname -s) = "Darwin" ]; then
-        brew install node
-    else
-        curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-        sudo apt install -y nodejs
-    fi
-else
-    echo 'Node is already installed'
-fi
+printf "\n\033[1mInstalling nvm and Node.js\033[0m\n"
 
 # Node version management
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 nvm install --lts --reinstall-packages-from=current
 nvm use --lts
-nvm alias default --lts
+nvm alias default node
 
 ##########
 # Golang
 ##########
 
-go get -u github.com/stamblerre/gocode
+printf "\n\033[1mInstalling golang and gopls\033[0m\n"
+
+# Install go
+
+curl -LO https://go.dev/dl/go1.22.5.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.22.5.linux-amd64.tar.gz
+rm go1.22.5.linux-amd64.tar.gz
+
+go install golang.org/x/tools/gopls@latest
 
 ##########
 # Neovim
 ##########
+
+printf "\n\033[1mInstalling neovim and dependencies\033[0m\n"
 
 # Install
 if [ $(uname -s) = "Darwin" ]; then
@@ -124,11 +133,9 @@ else
     sudo apt update
     sudo apt upgrade -y
     sudo apt install -y neovim \
-        python-dev python-pip \
         python3-dev python3-pip
 fi
 pip3 install neovim
-pip install neovim
 
 # Extra installations for neovim
 pip3 install typing # Denite
@@ -151,8 +158,10 @@ git config --global core.editor nvim
 # tmux
 #########
 
+printf "\n\033[1mInstalling tmux and dependencies\033[0m\n"
+
 # Uninstall the old (bundled) version
-if [[ $(tmux -V) = *3.3a ]]; then
+if [[ $(tmux -V) = *3.4 ]]; then
     echo 'Tmux is already at the correct version'
 else
     if [ $(uname -s) = "Darwin" ]; then
@@ -167,13 +176,15 @@ else
         fi
 
         echo 'Installing tmux'
-        sudo apt-get install -y libevent-dev libncurses-dev build-essential
-        wget https://github.com/tmux/tmux/releases/download/3.3a/tmux-3.3a.tar.gz
-        tar -xzvf tmux-3.3a.tar.gz
-        cd tmux-3.3a
+        sudo apt install -y libevent-dev libncurses-dev build-essential bison
+        curl -LO https://github.com/tmux/tmux/releases/download/3.4/tmux-3.4.tar.gz
+        tar -xzvf tmux-3.4.tar.gz
+        cd tmux-3.4
         ./configure && make
         sudo make install
         cd -
+        rm -rf tmux-3.4
+        rm tmux-3.4.tar.gz
     fi
 
     # Alias for TrueColor support
