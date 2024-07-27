@@ -1,0 +1,62 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$directory\
+$cmd_duration\
+$status"""
+
+right_format = """
+$character\
+$vcsh\
+$fossil_branch\
+$fossil_metrics\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$env_var\
+$custom\
+$sudo"""
+
+command_timeout = 2000
+
+[git_branch]
+format = " [ $symbol$branch(:$remote_branch) ]($style)"
+style = 'bold fg:bright-black bg:white'
+
+[git_status]
+format = '[ $conflicted$stashed$staged$modified$renamed$deleted$untracked](bg:black)[$ahead_behind](bg:bright-black)'
+up_to_date = ' [⇡0](fg:green bg:bright-black) • [⇣0](fg:red bg:bright-black) '
+ahead = ' [⇡${count}](fg:green bg:bright-black) • [⇣ 0](fg:red bg:bright-black) '
+diverged = ' [⇡${ahead_count}](fg:green bg:bright-black) • [⇣${behind_count}](fg:red bg:bright-black) '
+behind = ' [⇡0](fg:green bg:bright-black) • [⇣${count}](fg:red bg:bright-black) '
+staged = '[${count}](fg:green bg:black) '
+deleted = '[${count}](fg:red bg:black) '
+modified = '[${count}](fg:yellow bg:black) '
+untracked = '[${count}(fg:gray bg:black) '
+renamed = '[${count}](fg:blue bg:black) '
+
+[status]
+disabled = false
+format = "$symbol "
+symbol = '[❯](bold red)'
+success_symbol = '[❯](bold purple)'
+
+[cmd_duration]
+format = '[$duration](bold yellow) '
+
+[character] # The name of the module we are configuring is 'character'
+format = " $symbol"
+success_symbol = '[󰫶](bold cyan)' # '[\udb83\udc04](bold cyan)'
+error_symbol = '[󰫶](bold cyan)' # '[\udb83\udc04](bold cyan)'
+vimcmd_symbol = '[󰫻](bold yellow)' # '[\udb83\udc13](bold yellow)'
+vimcmd_visual_symbol = '[󰬃](bold purple)'

@@ -1,0 +1,55 @@
+- defaults:
+    link:
+      relink: true
+
+- clean:
+    - '~'
+
+- create:
+    - ~/.bin
+    - ~/.config/nvim
+    - ~/.tmux/plugins
+
+- link:
+    ~/.config/nvim/:
+      glob: true
+      path: config/nvim/*
+    ~/.config/starship.toml: config/starship.toml
+    ~/.gitconfig: gitconfig
+    ~/.tmux.conf: tmux.conf
+    ~/.tmux/plugins/tpm: tpm
+    ~/.zimrc: zimrc
+    ~/.zprofile: zprofile
+    ~/.zshenv: zshenv
+    ~/.zshrc: zshrc
+
+- shell:
+    - description: Setting up git user
+      command: 'printf "What is your GitHub name: " && read name && printf "What is your GitHub email: " && read email && git config --global user.name "$name" && git config --global user.email "$email"'
+      stdout: true
+      stdin: true
+    - description: Setting up git credential manager
+      command: 'printf "Do you want to use the Windows Git Credential Manager? [y/N]: " && read use_wincred && if [ "$use_wincred" = "y" ]; then git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"; fi'
+      stdout: true
+      stdin: true
+
+    - [sudo apt update, Updating package registry]
+    - ['curl -Lo- https://github.com/junegunn/fzf/releases/download/v0.54.2/fzf-0.54.2-linux_amd64.tar.gz | tar -xzf - -C ~/.bin', Installing fzf]
+
+    - [sudo apt install -y zsh, Installing zsh]
+    - [sudo chsh -s $(which zsh) $(whoami), Changing shell to zsh]
+    - ['curl -sS https://starship.rs/install.sh | sh -s -- --yes', Install starship]
+
+    - ['curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash', Installing NVM]
+    - ['source ~/.nvm/nvm.sh && nvm install --lts --reinstall-packages-from=current && nvm use --lts && nvm alias default node', Installing Node.js via NVM]
+
+    - ['sudo rm -rf /usr/local/go && curl -Lo- https://go.dev/dl/go1.22.4.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -', Installing golang]
+    - ['/usr/local/go/bin/go install golang.org/x/tools/gopls@latest']
+
+    - ['sudo add-apt-repository ppa:neovim-ppa/stable && sudo apt update && sudo apt upgrade -y && sudo apt install -y neovim python3-dev python3-pip && pip3 install neovim && npm i -g neovim typescript prettier tern', Installing Neovim]
+    - [nvim --headless '+PlugInstall | PlugUpdate' +UpdateRemotePlugins +qa, Installing Neovim Plugins]
+
+    - [sudo apt remove tmux && sudo apt install -y libevent-dev libncurses-dev build-essential bison, Installing tmux dependencies]
+    - ['curl -Lo- https://github.com/tmux/tmux/releases/download/3.4/tmux-3.4.tar.gz | tar -xzvf - && cd tmux-3.4 && ./configure && make && sudo make install && cd - && rm -rf tmux-3.4', Installing tmux]
+    
+    - ['curl -Lo ~/.bin/diff-so-fancy https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.4/diff-so-fancy', Installing diff-so-fancy]
